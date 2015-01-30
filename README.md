@@ -1,0 +1,2 @@
+# MyNewsReader
+Aplikasi News Reader
