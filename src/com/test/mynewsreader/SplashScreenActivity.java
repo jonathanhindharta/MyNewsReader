@@ -31,8 +31,10 @@ protected void onCreate(Bundle savedInstanceState) {
             } catch (Exception e) {
                 // TODO: handle exception
             } finally {
-                Intent i = new Intent(SplashScreenActivity.this, MainActivity.class);
+                Intent i = new Intent(SplashScreenActivity.this, LoginActivity.class);
+                finish();
                 startActivity(i);
+                
             }
         }
     };
