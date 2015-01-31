@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 
+
+import com.facebook.FacebookAuthorizationException;
+import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
@@ -12,6 +15,7 @@ import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.LoginButton.UserInfoChangedCallback;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -24,7 +28,7 @@ public class LoginActivity extends FragmentActivity {
 	private LoginButton loginBtn;
 
 
-	String userName;
+	String userFb;
 
 	private UiLifecycleHelper uiHelper;
 
@@ -36,7 +40,19 @@ public class LoginActivity extends FragmentActivity {
 
 		uiHelper = new UiLifecycleHelper(this, statusCallback);
 		uiHelper.onCreate(savedInstanceState);
+		
+	      Session session = Session.getActiveSession();
 
+	        if ((session != null || session.isOpened())) {
+	            // Kill login activity and go back to main
+	            finish();
+	            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+				Bundle moves = new Bundle();
+	    		moves.putString("userfbs", userFb);
+	            intent.putExtra("fb_session", session);
+	            startActivity(intent);
+	        }
+		
 		setContentView(R.layout.activity_login);
 
 		loginBtn = (LoginButton) findViewById(R.id.fb_login_button);
@@ -45,16 +61,15 @@ public class LoginActivity extends FragmentActivity {
 			@Override
 			public void onUserInfoFetched(GraphUser user) {
 				if (user != null) {
-					//Mentransfer Data user ke activity berikutnya
-					Bundle moves = new Bundle();
-	        		moves.putString("users", user.getName());
-					//Memanggil Class MainActivity
-					Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+					userFb= user.getName();
+					
 				} else {
 					
 				}
 			}
 		});
+		
+
 
 
 	}
@@ -112,6 +127,17 @@ public class LoginActivity extends FragmentActivity {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		uiHelper.onActivityResult(requestCode, resultCode, data);
+        Session session = Session.getActiveSession();
+
+        if ((session != null || session.isOpened())) {
+            // Kill login activity and go back to main
+            finish();
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+			Bundle moves = new Bundle();
+    		moves.putString("userfbs", userFb);
+            intent.putExtra("fb_session", session);
+            startActivity(intent);
+        }
 	}
 
 	@Override
@@ -119,4 +145,6 @@ public class LoginActivity extends FragmentActivity {
 		super.onSaveInstanceState(savedState);
 		uiHelper.onSaveInstanceState(savedState);
 	}
+	
+
 }
