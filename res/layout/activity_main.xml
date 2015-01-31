@@ -8,6 +8,30 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.test.mynewsreader.MainActivity" >
 
-  
+    <TextView
+        android:id="@+id/txtuser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="22dp"
+        android:text="User Name" />
+
+    <TextView
+        android:id="@+id/txtsesi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_below="@+id/txtuser"
+        android:layout_marginTop="60dp"
+        android:text="Sesi" />
+
+    <Button
+        android:id="@+id/btnlg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/txtuser"
+        android:layout_centerVertical="true"
+        android:text="LogOut" />
 
 </RelativeLayout>
