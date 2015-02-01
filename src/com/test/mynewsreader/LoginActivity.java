@@ -3,6 +3,7 @@ package com.test.mynewsreader;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.zip.Inflater;
 
 import com.facebook.FacebookAuthorizationException;
 import com.facebook.FacebookOperationCanceledException;
@@ -18,11 +19,17 @@ import com.facebook.Request;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.Signature;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
+import android.util.Base64;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 
@@ -32,7 +39,8 @@ public class LoginActivity extends FragmentActivity {
 	private LoginButton loginBtn;
 	ProgressDialog mProgressDialog;
 
-	String userFb;
+	String userFb,masuk, idFb;
+	int lg =0;
 	int konter=0;
 
 	private UiLifecycleHelper uiHelper;
@@ -46,27 +54,43 @@ public class LoginActivity extends FragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		
+
+		
 		uiHelper = new UiLifecycleHelper(this, statusCallback);
 		uiHelper.onCreate(savedInstanceState);
 		
 		final Session session = Session.getActiveSession();
-	      
+		Bundle cek = getIntent().getExtras(); 
 		setContentView(R.layout.activity_login);
 		//final TextView txtuser1 = (TextView) findViewById(R.id.txtuser1);
 		
-		loginBtn = (LoginButton) findViewById(R.id.fb_login_button);
-		 loginBtn.setUserInfoChangedCallback(new UserInfoChangedCallback() {
-				@Override
-				public void onUserInfoFetched(GraphUser user) {
-					
-				}
-			});
-		
 
 		
+		loginBtn = (LoginButton) findViewById(R.id.fb_login_button);
+		
+		lg = getIntent().getIntExtra("nc", 0);
+		Log.v(TAG,"Nilai lg : "+ lg);
+		
+	/*	if (lg>0) {
+			
+			session.getActiveSession().closeAndClearTokenInformation();
+			masuk = "masuk";
+			Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+			finish();
+            // Kill login activity and go back to main
+			session.getActiveSession().closeAndClearTokenInformation();
+			
+            startActivity(intent); 
+            session.getActiveSession().closeAndClearTokenInformation();
+		}
+		else {
+			
+		}
+		Log.v(TAG,"Nilai masuk : "+ session.isOpened()); */
 
 	    
-	      if ((session != null  && session.isOpened())) {
+	      if ((session.isOpened())) {
 	    	  /**  Request request = Request.newMeRequest(session, new Request.GraphUserCallback() {
 				@Override
 				public void onCompleted(GraphUser user, Response response) {
@@ -100,6 +124,7 @@ public class LoginActivity extends FragmentActivity {
 						
 						if (user != null && konter==0) {
 							userFb = user.getName();
+							 idFb = user.getId();
 							//txtuser1.setText(userFb);
 							konter++;
 
@@ -115,13 +140,16 @@ public class LoginActivity extends FragmentActivity {
 	    	        public void run()
 	    	        {
 	    	        	mProgressDialog.dismiss();
-	    	        	finish();
+	    	        	
 	    	            // Kill login activity and go back to main
 	    	           Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 	    	            Bundle moves = new Bundle();
 	    	    		moves.putString("userfb", userFb);
+	    	    		moves.putString("idfb", idFb);
 	    	            intent.putExtra("fb_session", session);
 	    	            intent.putExtras(moves);
+	    	            
+	    	            finish();
 	    	            startActivity(intent); 
 	    	        	
 	    	        }
@@ -190,35 +218,37 @@ public class LoginActivity extends FragmentActivity {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+	      Session.getActiveSession()
+	          .onActivityResult(this, requestCode, resultCode, data);
 		uiHelper.onActivityResult(requestCode, resultCode, data);
         final Session session = Session.getActiveSession();
 
+        
+	 /* loginBtn.setUserInfoChangedCallback(new UserInfoChangedCallback() {
+			@Override
+			public void onUserInfoFetched(GraphUser user) {
+				
+				if (user != null && konter==0) {
+					userFb = user.getName();
+					//txtuser1.setText(userFb);
+					konter++;
 
-	    	  loginBtn.setUserInfoChangedCallback(new UserInfoChangedCallback() {
-					@Override
-					public void onUserInfoFetched(GraphUser user) {
-						
-						if (user != null && konter==0) {
-							userFb = user.getName();
-							//txtuser1.setText(userFb);
-							konter++;
+					         
+				} else {
+					
+				}
+			}
+		}); */
 
-							         
-						} else {
-							
-						}
-					}
-				});
-
-	    	        	
-	    	        	finish();
-	    	            // Kill login activity and go back to main
-	    	           Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-	    	            Bundle moves = new Bundle();
-	    	    		moves.putString("userfb", userFb);
-	    	            intent.putExtra("fb_session", session);
-	    	            intent.putExtras(moves);
-	    	            startActivity(intent); 
+	        	
+	        	finish();
+	            // Kill login activity and go back to main
+	           Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+	            Bundle moves = new Bundle();
+	    		moves.putString("userfb", userFb);
+	            intent.putExtra("fb_session", session);
+	            intent.putExtras(moves);
+	            startActivity(intent); 
 	    	        	
 	    	    
 	}
@@ -228,9 +258,6 @@ public class LoginActivity extends FragmentActivity {
 		super.onSaveInstanceState(savedState);
 		uiHelper.onSaveInstanceState(savedState);
 	}
-	
-
-
 	
 
 
