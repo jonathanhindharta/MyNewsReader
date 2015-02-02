@@ -3,11 +3,7 @@ package com.test.mynewsreader;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.zip.Inflater;
 
-import com.facebook.FacebookAuthorizationException;
-import com.facebook.FacebookOperationCanceledException;
-import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
@@ -16,66 +12,99 @@ import com.facebook.widget.LoginButton;
 import com.facebook.widget.LoginButton.UserInfoChangedCallback;
 import com.facebook.Request;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.Signature;
-import android.os.AsyncTask;
+import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
+import android.view.View.OnClickListener;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
 
 
-public class LoginActivity extends FragmentActivity {
+public class LoginActivity extends FragmentActivity implements OnClickListener,
+ConnectionCallbacks, OnConnectionFailedListener {
 	
-
-	private LoginButton loginBtn;
 	ProgressDialog mProgressDialog;
-
-	String userFb,masuk, idFb;
+	
+	//===============Variabel Untuk Login Facebook========================
+	private LoginButton loginBtn;
+	String userFb, idFb;
 	int lg =0;
 	int konter=0;
-
+	Session session;
 	private UiLifecycleHelper uiHelper;
-
 	private static final List<String> PERMISSIONS = Arrays.asList("publish_actions");
-
-
 	protected static final String TAG = null;
+	//================Akhir Variabel Untuk Login Facebook==========================
+	
+	
+	//==================Variabel untuk Login Google+==========================
+	private static final int RC_SIGN_IN = 0;
+	// Logcat tag
+	//private static final String TAG = "MainActivity";
 
+	// Profile pic image size in pixels
+	private static final int PROFILE_PIC_SIZE = 400;
+
+	// Google client to interact with Google API
+	private GoogleApiClient mGoogleApiClient;
+	String personName, personPhotoUrl; 
+	/**
+	 * A flag indicating that a PendingIntent is in progress and prevents us
+	 * from starting further intents.
+	 */
+	private boolean mIntentInProgress;
+	private boolean mSignInClicked;
+	private ConnectionResult mConnectionResult;
+	private SignInButton btnSignIn;
+	//==================Akhir Variabel untuk Login Google+==========================
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		
-
-		
+		//====================Inisialisasi Var Login Facebook========================	
 		uiHelper = new UiLifecycleHelper(this, statusCallback);
-		uiHelper.onCreate(savedInstanceState);
-		
-		final Session session = Session.getActiveSession();
+		uiHelper.onCreate(savedInstanceState);		
+		session = Session.getActiveSession();
 		Bundle cek = getIntent().getExtras(); 
-		setContentView(R.layout.activity_login);
-		//final TextView txtuser1 = (TextView) findViewById(R.id.txtuser1);
-		
-
-		
-		loginBtn = (LoginButton) findViewById(R.id.fb_login_button);
-		
+		setContentView(R.layout.activity_login);		
+		loginBtn = (LoginButton) findViewById(R.id.fb_login_button);		
 		lg = getIntent().getIntExtra("nc", 0);
-		Log.v(TAG,"Nilai lg : "+ lg);
+		//=================Akhir Inisialisasi Var Login Facebook========================	
 		
-	/*	if (lg>0) {
-			
+		//====================Inisialisasi Var Login Google+========================	
+		btnSignIn = (SignInButton) findViewById(R.id.btn_sign_in);
+		// Button click listeners
+		btnSignIn.setOnClickListener(this);
+		
+		//Connect ke Api Google
+		mGoogleApiClient = new GoogleApiClient.Builder(this)
+		.addConnectionCallbacks(this)
+		.addOnConnectionFailedListener(this).addApi(Plus.API, null)
+		.addScope(Plus.SCOPE_PLUS_LOGIN).build();
+		//====================Akhir Inisialisasi Var Login Google+========================
+		
+		
+		//Jika lg bernilai lg>0 maka Halaman Login terbka dari logout, jika tidak maka baru terbuka
+		if (lg>0) {
 			session.getActiveSession().closeAndClearTokenInformation();
-			masuk = "masuk";
+			
+			//session=null;
 			Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
 			finish();
             // Kill login activity and go back to main
@@ -87,31 +116,12 @@ public class LoginActivity extends FragmentActivity {
 		else {
 			
 		}
-		Log.v(TAG,"Nilai masuk : "+ session.isOpened()); */
+		//Log.v(TAG,"Nilai masuk : "+ session.isOpened()); 
 
-	    
-	      if ((session.isOpened())) {
-	    	  /**  Request request = Request.newMeRequest(session, new Request.GraphUserCallback() {
-				@Override
-				public void onCompleted(GraphUser user, Response response) {
-					// TODO Auto-generated method stub
-					// If the response is successful
-	                  if (session == Session.getActiveSession()) {
-	                      if (user != null) { 
-	                    	  String userFb = user.getName();//user's profile name
-	                      }   
-	                  }
-				}   
-	          }); 
-	          Request.executeBatchAsync(request);
-	    	 	finish();
-	            // Kill login activity and go back to main
-	           Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-	            Bundle moves = new Bundle();
-	    		//moves.putString("userfb", userFb);
-	            intent.putExtra("fb_session", session);
-	           
-	            startActivity(intent); **/
+	    //=====================Cek Sesi Facebook ada atau sudah ditutup==============================
+		
+		if ((session != null  && session.isOpened())) {
+
 	    	  	mProgressDialog = new ProgressDialog(LoginActivity.this);
 				mProgressDialog.setTitle("Verifikasi Login Facebook");
 				mProgressDialog.setMessage("Loading...");
@@ -146,6 +156,7 @@ public class LoginActivity extends FragmentActivity {
 	    	            Bundle moves = new Bundle();
 	    	    		moves.putString("userfb", userFb);
 	    	    		moves.putString("idfb", idFb);
+	    	    		moves.putInt("lo",1);
 	    	            intent.putExtra("fb_session", session);
 	    	            intent.putExtras(moves);
 	    	            
@@ -153,19 +164,17 @@ public class LoginActivity extends FragmentActivity {
 	    	            startActivity(intent); 
 	    	        	
 	    	        }
-	    	    }, 8000);
-
-	 
+	    	    }, 8000);	 
 	        }
 	      else {
 	    	  
 	      }
-	 
-
-
+	    //===================== Akhir Cek Sesi Facebook ada atau sudah ditutup==============================
 
 	}
 
+	
+	//=======================Method Implementasi Untuk Login Facebook===================================
 	private Session.StatusCallback statusCallback = new Session.StatusCallback() {
 		@Override
 		public void call(Session session, SessionState state,
@@ -214,7 +223,7 @@ public class LoginActivity extends FragmentActivity {
 		super.onDestroy();
 		uiHelper.onDestroy();
 	}
-
+	//Untuk Aksi Setelah Login Google+ ataupun Facebook
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -222,34 +231,27 @@ public class LoginActivity extends FragmentActivity {
 	          .onActivityResult(this, requestCode, resultCode, data);
 		uiHelper.onActivityResult(requestCode, resultCode, data);
         final Session session = Session.getActiveSession();
-
         
-	 /* loginBtn.setUserInfoChangedCallback(new UserInfoChangedCallback() {
-			@Override
-			public void onUserInfoFetched(GraphUser user) {
-				
-				if (user != null && konter==0) {
-					userFb = user.getName();
-					//txtuser1.setText(userFb);
-					konter++;
-
-					         
-				} else {
-					
-				}
-			}
-		}); */
-
-	        	
-	        	finish();
-	            // Kill login activity and go back to main
-	           Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-	            Bundle moves = new Bundle();
-	    		moves.putString("userfb", userFb);
-	            intent.putExtra("fb_session", session);
-	            intent.putExtras(moves);
-	            startActivity(intent); 
-	    	        	
+		if (!mGoogleApiClient.isConnecting()) {
+			mGoogleApiClient.connect();
+			finish();
+			Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+	        Bundle moves = new Bundle();
+			moves.putString("userg", personName);
+			moves.putString("foto", personPhotoUrl);
+			moves.putInt("lo",2);
+	        intent.putExtras(moves);
+	        startActivity(intent);
+		}
+		
+		else {
+			finish();
+	        // Kill login activity and go back to main
+	       Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+	        
+	        startActivity(intent); 
+		}
+     	
 	    	    
 	}
 
@@ -259,6 +261,138 @@ public class LoginActivity extends FragmentActivity {
 		uiHelper.onSaveInstanceState(savedState);
 	}
 	
+	//=======================Akhir Method Implementasi Untuk Login Facebook===================================
+	
+	
+	//======================= Method Implementasi Untuk Login Google+===================================
+	protected void onStart() {
+		super.onStart();
+		mGoogleApiClient.connect();
+	}
 
+	protected void onStop() {
+		super.onStop();
+		if (mGoogleApiClient.isConnected()) {
+			mGoogleApiClient.disconnect();
+		}
+	}
+	
+	/**
+	 * Method to resolve any signin errors
+	 * */
+	private void resolveSignInError() {
+		if (mConnectionResult.hasResolution()) {
+			try {
+				mIntentInProgress = true;
+				mConnectionResult.startResolutionForResult(this, RC_SIGN_IN);
+			} catch (SendIntentException e) {
+				mIntentInProgress = false;
+				mGoogleApiClient.connect();
+			}
+		}
+	}
 
+	@Override
+	public void onConnectionFailed(ConnectionResult result) {
+		if (!result.hasResolution()) {
+			GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), this,
+					0).show();
+			return;
+		}
+
+		if (!mIntentInProgress) {
+			// Store the ConnectionResult for later usage
+			mConnectionResult = result;
+
+			if (mSignInClicked) {
+				// The user has already clicked 'sign-in' so we attempt to
+				// resolve all
+				// errors until the user is signed in, or they cancel.
+				resolveSignInError();
+			}
+		}
+
+	}
+	
+	
+	
+	@Override
+	public void onConnected(Bundle arg0) {
+		mSignInClicked = false;
+		Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
+
+		// Get user's information
+		getProfileInformation();
+
+		// Update the UI after signin
+		//updateUI(true);
+
+	}
+	
+	/**
+	 * Fetching user's information name, email, profile pic
+	 * */
+	private void getProfileInformation() {
+		try {
+			if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
+				Person currentPerson = Plus.PeopleApi
+						.getCurrentPerson(mGoogleApiClient);
+				personName = currentPerson.getDisplayName();
+				personPhotoUrl = currentPerson.getImage().getUrl();
+
+				
+
+				//txtName.setText(personName);
+				//txtEmail.setText(email);
+
+				// by default the profile url gives 50x50 px image only
+				// we can replace the value with whatever dimension we want by
+				// replacing sz=X
+				personPhotoUrl = personPhotoUrl.substring(0,
+						personPhotoUrl.length() - 2)
+						+ PROFILE_PIC_SIZE;
+
+				//new LoadProfileImage(imgProfilePic).execute(personPhotoUrl);
+
+			} else {
+				Toast.makeText(getApplicationContext(),
+						"Person information is null", Toast.LENGTH_LONG).show();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void onConnectionSuspended(int arg0) {
+		mGoogleApiClient.connect();
+		//updateUI(false);
+	}
+
+	/**
+	 * Button on click listener
+	 * */
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.btn_sign_in:
+			// Signin button clicked
+			signInWithGplus();
+			break;
+		
+		}
+	}
+
+	/**
+	 * Sign-in into google
+	 * */
+	private void signInWithGplus() {
+		if (!mGoogleApiClient.isConnecting()) {
+			mSignInClicked = true;
+			resolveSignInError();
+		}
+	}
+
+	
+	
 }

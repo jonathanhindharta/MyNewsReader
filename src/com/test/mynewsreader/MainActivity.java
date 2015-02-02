@@ -11,7 +11,12 @@ import com.facebook.widget.LoginButton;
 import com.facebook.widget.ProfilePictureView;
 
 
+
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.plus.Plus;
+
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -19,20 +24,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
-
+import java.io.InputStream;
 import java.util.ArrayList;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -45,14 +54,20 @@ public class MainActivity extends Activity {
 	String userFb;
 	private static final String TAG = null;
 	private ProfilePictureView profilePictureView;
-	
+	Session session;
+	private GoogleApiClient mGoogleApiClient;
+	private ImageView imgProfilePic;
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
+	private LinearLayout drawer1;
 	private ActionBarDrawerToggle mDrawerToggle;
-
+	TextView txtuser;
+	Button btnlg;
+	
+	
 	// nav drawer title
 	private CharSequence mDrawerTitle;
-
+	
 	// used to store app title
 	private CharSequence mTitle;
 
@@ -66,65 +81,100 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Bundle sesi = getIntent().getExtras();
-		final String users = getIntent().getStringExtra("userfb");
-		final String ids = getIntent().getStringExtra("idfb");
-		Session session = Session.getActiveSession();
+		
+		
 		
 		setContentView(R.layout.activity_main);
+		
+		drawer1 = (LinearLayout) findViewById(R.id.drawer1);
+
+		profilePictureView = (ProfilePictureView) findViewById(R.id.selection_profile_pic);
+		txtuser = (TextView) findViewById(R.id.txtuser);
+		btnlg = (Button) findViewById(R.id.btnlg);
+		imgProfilePic = (ImageView) findViewById(R.id.imgProfilePic);
+		int lfg = getIntent().getIntExtra("lo", 0);
+		
 		if (sesi != null) {           
 			//txtsesi.setText("Ada Sesi fb");
-			Session.setActiveSession((Session) sesi.getSerializable("fb_session"));
-			session = Session.getActiveSession();
 			
-		}
-	/*	profilePictureView = (ProfilePictureView) findViewById(R.id.selection_profile_pic);
-		final TextView txtuser = (TextView) findViewById(R.id.txtuser);
-		TextView txtsesi = (TextView) findViewById(R.id.txtsesi);
-		Button btnlg = (Button) findViewById(R.id.btnlg);
-		
-		
-		
-		
+				if (lfg==2) {
+					//mGoogleApiClient.connect();
+					final String users = getIntent().getStringExtra("userg");
+					final String fotos = getIntent().getStringExtra("foto");
+					txtuser.setText(users);
+					imgProfilePic.setVisibility(View.VISIBLE);
+					new LoadProfileImage(imgProfilePic).execute(fotos);
+					
+				}
+				
+				else {
+					Session.setActiveSession((Session) sesi.getSerializable("fb_session"));
+					session = Session.getActiveSession();
+					final String users = getIntent().getStringExtra("userfb");
+					final String ids = getIntent().getStringExtra("idfb");
+					txtuser.setText(users);
+					profilePictureView.setVisibility(View.VISIBLE);
+					profilePictureView.setProfileId(ids);
+				}
+				
+				
+			}
 	
-			txtuser.setText(users);
-			profilePictureView.setProfileId(ids);
+		
+		
+		//TextView txtsesi = (TextView) findViewById(R.id.txtsesi);
+		
+		
 		
 		
 		//Untuk LogOut
 		btnlg.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				// Execute Description AsyncTask
-				Session session = Session.getActiveSession();
-			    if (session != null  && session.isOpened()) {
-
-			        if (!session.getState().isClosed()) {
-			            session.getActiveSession().closeAndClearTokenInformation();
-			            //clear your preferences if saved
-			            finish();
-			            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-			            Bundle lt = new Bundle();
-			            lt.putInt("nc", 1);
-	    	    		
-	    	            intent.putExtras(lt);
-			            startActivity(intent);
-			        }
-			    } else {
-
-			        session = new Session(getBaseContext());
-			        Session.setActiveSession(session);
-			        session.getActiveSession().closeAndClearTokenInformation();
-			        //clear your preferences if saved
-			        finish();
-			        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-		            Bundle lt = new Bundle();
-		            lt.putInt("nc", 1);
-    	            intent.putExtras(lt);
-		            startActivity(intent);
-			           
-
-			    }
+				if (mGoogleApiClient.isConnected()) {
+					Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+					mGoogleApiClient.disconnect();
+					mGoogleApiClient.connect();
+					finish();
+					Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+					startActivity(intent);
+					
+				}
+				else {
+						if (session != null  && session.isOpened()) {
+	
+					        if (!session.getState().isClosed()) {
+					            session.getActiveSession().closeAndClearTokenInformation();
+					            //session=null;
+					            //clear your preferences if saved
+					            finish();
+					            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+					            Bundle lt = new Bundle();
+					            lt.putInt("nc", 1);
+			    	    		
+			    	            intent.putExtras(lt);
+					            startActivity(intent);
+					        }
+					    } else {
+	
+					        session = new Session(getBaseContext());
+					        Session.setActiveSession(session);
+					        session.getActiveSession().closeAndClearTokenInformation();
+					        //session=null;
+					        //clear your preferences if saved
+					        finish();
+					        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+				            Bundle lt = new Bundle();
+				            lt.putInt("nc", 1);
+		    	            intent.putExtras(lt);
+				            startActivity(intent);
+					           
+	
+					    }
+				}
+			    
 			}
-		}); */
+		}); 
 	
 		mTitle = mDrawerTitle = getTitle();
 
@@ -134,15 +184,15 @@ public class MainActivity extends Activity {
 		// nav drawer icons from resources
 		navMenuIcons = getResources()
 				.obtainTypedArray(R.array.nav_drawer_icons);
-
+		
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
-
+		
 		navDrawerItems = new ArrayList<NavDrawerItem>();
 
 		// adding nav drawer items to array
-		// Profile
-		navDrawerItems.add(new NavDrawerItem(users, navMenuIcons.getResourceId(0, -1)));
+		// RSS
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
 		// Tambah RSS Reader
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
 		// Twitter
@@ -231,7 +281,7 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		// if nav drawer is opened, hide the action items
-		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+		boolean drawerOpen = mDrawerLayout.isDrawerOpen(drawer1);
 		menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
 		return super.onPrepareOptionsMenu(menu);
 	}
@@ -267,7 +317,7 @@ public class MainActivity extends Activity {
 			mDrawerList.setItemChecked(position, true);
 			mDrawerList.setSelection(position);
 			setTitle(navMenuTitles[position]);
-			mDrawerLayout.closeDrawer(mDrawerList);
+			mDrawerLayout.closeDrawer(drawer1);
 		} else {
 			// error in creating fragment
 			Log.e("MainActivity", "Error in creating fragment");
@@ -298,5 +348,35 @@ public class MainActivity extends Activity {
 		// Pass any configuration change to the drawer toggls
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
+	
+	
+	/**
+	 * Background Async task to load user profile picture from url
+	 * */
+	private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
+		ImageView bmImage;
+
+		public LoadProfileImage(ImageView bmImage) {
+			this.bmImage = bmImage;
+		}
+
+		protected Bitmap doInBackground(String... urls) {
+			String urldisplay = urls[0];
+			Bitmap mIcon11 = null;
+			try {
+				InputStream in = new java.net.URL(urldisplay).openStream();
+				mIcon11 = BitmapFactory.decodeStream(in);
+			} catch (Exception e) {
+				Log.e("Error", e.getMessage());
+				e.printStackTrace();
+			}
+			return mIcon11;
+		}
+
+		protected void onPostExecute(Bitmap result) {
+			bmImage.setImageBitmap(result);
+		}
+	}
+
 
 }
