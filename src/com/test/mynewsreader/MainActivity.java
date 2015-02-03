@@ -12,7 +12,11 @@ import com.facebook.widget.ProfilePictureView;
 
 
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.plus.Plus;
 
 import android.content.Intent;
@@ -27,6 +31,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+
+
 
 
 import java.io.InputStream;
@@ -49,12 +56,12 @@ import android.widget.ListView;
 
 
 @SuppressLint("NewApi")
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener {
 	
 	String userFb;
 	private static final String TAG = null;
 	private ProfilePictureView profilePictureView;
-	Session session;
+	static Session fsession,gsession;
 	private GoogleApiClient mGoogleApiClient;
 	private ImageView imgProfilePic;
 	private DrawerLayout mDrawerLayout;
@@ -63,7 +70,11 @@ public class MainActivity extends Activity {
 	private ActionBarDrawerToggle mDrawerToggle;
 	TextView txtuser;
 	Button btnlg;
+	LoginActivity login = new LoginActivity();
 	
+	
+	private boolean mIntentInProgress;
+	private ConnectionResult mConnectionResult;
 	
 	// nav drawer title
 	private CharSequence mDrawerTitle;
@@ -82,7 +93,11 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		Bundle sesi = getIntent().getExtras();
 		
-		
+		//Connect ke Api Google
+				mGoogleApiClient = new GoogleApiClient.Builder(this)
+				.addConnectionCallbacks(this)
+				.addOnConnectionFailedListener(this).addApi(Plus.API, null)
+				.addScope(Plus.SCOPE_PLUS_LOGIN).build();
 		
 		setContentView(R.layout.activity_main);
 		
@@ -98,7 +113,9 @@ public class MainActivity extends Activity {
 			//txtsesi.setText("Ada Sesi fb");
 			
 				if (lfg==2) {
-					//mGoogleApiClient.connect();
+					mGoogleApiClient.connect();
+					Session.setActiveSession((Session) sesi.getSerializable("gsession"));
+					gsession = Session.getActiveSession();
 					final String users = getIntent().getStringExtra("userg");
 					final String fotos = getIntent().getStringExtra("foto");
 					txtuser.setText(users);
@@ -109,7 +126,7 @@ public class MainActivity extends Activity {
 				
 				else {
 					Session.setActiveSession((Session) sesi.getSerializable("fb_session"));
-					session = Session.getActiveSession();
+					fsession = Session.getActiveSession();
 					final String users = getIntent().getStringExtra("userfb");
 					final String ids = getIntent().getStringExtra("idfb");
 					txtuser.setText(users);
@@ -121,30 +138,29 @@ public class MainActivity extends Activity {
 			}
 	
 		
-		
-		//TextView txtsesi = (TextView) findViewById(R.id.txtsesi);
-		
-		
-		
-		
 		//Untuk LogOut
 		btnlg.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				// Execute Description AsyncTask
-				if (mGoogleApiClient.isConnected()) {
+				if (gsession!= null  || gsession.isOpened()) {
 					Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
 					mGoogleApiClient.disconnect();
-					mGoogleApiClient.connect();
+					gsession.getActiveSession().closeAndClearTokenInformation();
+					//mGoogleApiClient.connect();
 					finish();
 					Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+					Bundle lt = new Bundle();
+		            lt.putInt("nc", 2);
+    	    		
+    	            intent.putExtras(lt);
 					startActivity(intent);
 					
 				}
 				else {
-						if (session != null  && session.isOpened()) {
+						if (fsession != null  || fsession.isOpened()) {
 	
-					        if (!session.getState().isClosed()) {
-					            session.getActiveSession().closeAndClearTokenInformation();
+					        if (!fsession.getState().isClosed()) {
+					            fsession.getActiveSession().closeAndClearTokenInformation();
 					            //session=null;
 					            //clear your preferences if saved
 					            finish();
@@ -157,9 +173,9 @@ public class MainActivity extends Activity {
 					        }
 					    } else {
 	
-					        session = new Session(getBaseContext());
-					        Session.setActiveSession(session);
-					        session.getActiveSession().closeAndClearTokenInformation();
+					        fsession = new Session(getBaseContext());
+					        Session.setActiveSession(fsession);
+					        fsession.getActiveSession().closeAndClearTokenInformation();
 					        //session=null;
 					        //clear your preferences if saved
 					        finish();
@@ -378,5 +394,37 @@ public class MainActivity extends Activity {
 		}
 	}
 
+	
+	@Override
+	public void onConnectionFailed(ConnectionResult result) {
+		if (!result.hasResolution()) {
+			GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), this,
+					0).show();
+			return;
+		}
+
+		if (!mIntentInProgress) {
+			// Store the ConnectionResult for later usage
+			mConnectionResult = result;
+
+			
+		}
+
+	}
+
+	@Override
+	public void onConnected(Bundle connectionHint) {
+		// TODO Auto-generated method stub
+		mGoogleApiClient.connect();
+		
+	}
+
+	@Override
+	public void onConnectionSuspended(int cause) {
+		// TODO Auto-generated method stub
+		mGoogleApiClient.connect();
+		
+	}
+	
 
 }

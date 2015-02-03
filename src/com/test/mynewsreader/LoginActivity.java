@@ -58,7 +58,7 @@ ConnectionCallbacks, OnConnectionFailedListener {
 	//private static final String TAG = "MainActivity";
 
 	// Profile pic image size in pixels
-	private static final int PROFILE_PIC_SIZE = 400;
+	private static final int PROFILE_PIC_SIZE = 100;
 
 	// Google client to interact with Google API
 	private GoogleApiClient mGoogleApiClient;
@@ -100,8 +100,8 @@ ConnectionCallbacks, OnConnectionFailedListener {
 		//====================Akhir Inisialisasi Var Login Google+========================
 		
 		
-		//Jika lg bernilai lg>0 maka Halaman Login terbka dari logout, jika tidak maka baru terbuka
-		if (lg>0) {
+		//Jika lg bernilai lg>0 maka Halaman Login terbuka dari logout, jika tidak maka baru terbuka
+		if (lg==1) {
 			session.getActiveSession().closeAndClearTokenInformation();
 			
 			//session=null;
@@ -113,9 +113,7 @@ ConnectionCallbacks, OnConnectionFailedListener {
             startActivity(intent); 
             session.getActiveSession().closeAndClearTokenInformation();
 		}
-		else {
-			
-		}
+		
 		//Log.v(TAG,"Nilai masuk : "+ session.isOpened()); 
 
 	    //=====================Cek Sesi Facebook ada atau sudah ditutup==============================
@@ -223,7 +221,7 @@ ConnectionCallbacks, OnConnectionFailedListener {
 		super.onDestroy();
 		uiHelper.onDestroy();
 	}
-	//Untuk Aksi Setelah Login Google+ ataupun Facebook
+	//Untuk Aksi Setelah Login Facebook
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -232,25 +230,13 @@ ConnectionCallbacks, OnConnectionFailedListener {
 		uiHelper.onActivityResult(requestCode, resultCode, data);
         final Session session = Session.getActiveSession();
         
-		if (!mGoogleApiClient.isConnecting()) {
-			mGoogleApiClient.connect();
-			finish();
-			Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-	        Bundle moves = new Bundle();
-			moves.putString("userg", personName);
-			moves.putString("foto", personPhotoUrl);
-			moves.putInt("lo",2);
-	        intent.putExtras(moves);
-	        startActivity(intent);
-		}
-		
-		else {
+
 			finish();
 	        // Kill login activity and go back to main
 	       Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
 	        
 	        startActivity(intent); 
-		}
+		
      	
 	    	    
 	}
@@ -318,14 +304,54 @@ ConnectionCallbacks, OnConnectionFailedListener {
 	
 	@Override
 	public void onConnected(Bundle arg0) {
-		mSignInClicked = false;
-		Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
+		if (lg==2) {
+			Log.v(TAG, "Berhasil Masuk lg=2");
+			if (mGoogleApiClient.isConnected()) {
+			Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+			mGoogleApiClient.disconnect();
+			}
+		}
+		
+		else {
+			mSignInClicked = false;
+			//Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
 
-		// Get user's information
-		getProfileInformation();
+			// Get user's information
+			getProfileInformation();
 
-		// Update the UI after signin
-		//updateUI(true);
+			// Update the UI after signin
+			//updateUI(true);
+			mProgressDialog = new ProgressDialog(LoginActivity.this);
+			mProgressDialog.setTitle("Verifikasi Login Google+");
+			mProgressDialog.setMessage("Loading...");
+			mProgressDialog.setIndeterminate(false);
+			mProgressDialog.show();
+			mProgressDialog.setCancelable(false);
+
+			Handler handler = new Handler();
+		    handler.postDelayed(new Runnable()
+		    {
+		        public void run()
+		        {
+		        	mProgressDialog.dismiss();
+		        	
+		            // Kill login activity and go back to main
+		        	Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+		            Bundle moves = new Bundle();
+		    		moves.putString("userg", personName);
+		    		moves.putString("foto", personPhotoUrl);
+		    		moves.putInt("lo",2);
+		    		intent.putExtra("gsession",session);
+		            intent.putExtras(moves);
+		            finish();
+		            startActivity(intent);
+		        	
+		        }
+		    }, 4000);	
+			
+		}
+		
+		
 
 	}
 	
@@ -340,19 +366,12 @@ ConnectionCallbacks, OnConnectionFailedListener {
 				personName = currentPerson.getDisplayName();
 				personPhotoUrl = currentPerson.getImage().getUrl();
 
-				
-
-				//txtName.setText(personName);
-				//txtEmail.setText(email);
-
 				// by default the profile url gives 50x50 px image only
 				// we can replace the value with whatever dimension we want by
 				// replacing sz=X
 				personPhotoUrl = personPhotoUrl.substring(0,
 						personPhotoUrl.length() - 2)
 						+ PROFILE_PIC_SIZE;
-
-				//new LoadProfileImage(imgProfilePic).execute(personPhotoUrl);
 
 			} else {
 				Toast.makeText(getApplicationContext(),
