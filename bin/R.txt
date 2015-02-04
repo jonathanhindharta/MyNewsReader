@@ -614,7 +614,8 @@ int string auth_client_needs_update_title 0x7f060017
 int string auth_client_play_services_err_notification_msg 0x7f060018
 int string auth_client_requested_by_msg 0x7f060019
 int string auth_client_using_bad_version_title 0x7f060014
-int string btnsg 0x7f06004b
+int string btnsf 0x7f06004b
+int string btnsg 0x7f06004c
 int string buka 0x7f06004a
 int string com_facebook_choose_friends 0x7f060038
 int string com_facebook_dialogloginactivity_ok_button 0x7f060027
@@ -665,9 +666,9 @@ int string common_google_play_services_update_text 0x7f060008
 int string common_google_play_services_update_title 0x7f060007
 int string common_signin_button_text 0x7f060012
 int string common_signin_button_text_long 0x7f060013
-int string desc_list_item_icon 0x7f06004e
-int string drawer_close 0x7f06004d
-int string drawer_open 0x7f06004c
+int string desc_list_item_icon 0x7f06004f
+int string drawer_close 0x7f06004e
+int string drawer_open 0x7f06004d
 int string lgt 0x7f060048
 int string masuklr 0x7f060049
 int string saran 0x7f060047
