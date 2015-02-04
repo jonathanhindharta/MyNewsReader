@@ -9,15 +9,36 @@
     <TextView
         android:id="@+id/txtjudul"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:textStyle="bold"
+        android:layout_weight="0.1"
         android:textSize="16sp" />
-    
+
     <WebView
         android:id="@+id/webrss"
+        android:layout_weight="0.8"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp" />
 
-    
+    <LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="0dp"
+	    android:layout_weight="0.1"
+	    android:gravity="center_horizontal"
+	    android:orientation="horizontal" >
+	     
+	     <Button
+	        android:id="@+id/btnsf"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Share on Facebook" />
+         <Button
+	        android:id="@+id/btnsg"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/btnsg"
+	         />
+        
+    </LinearLayout>
 
 </LinearLayout>
