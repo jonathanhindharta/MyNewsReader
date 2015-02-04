@@ -29,15 +29,24 @@
 	     
 	     <Button
 	        android:id="@+id/btnsf"
-	        android:layout_width="wrap_content"
+	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
-	        android:text="Share on Facebook" />
+	        android:layout_weight="0.1"
+	        android:text="@string/btnsf"
+	        android:background="#0000FF"
+	        android:textColor="#FFFFFF"
+	        android:textSize="12sp"
+	        android:visibility="gone" />
          <Button
 	        android:id="@+id/btnsg"
-	        android:layout_width="wrap_content"
+	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
+	        android:layout_weight="0.1"
 	        android:text="@string/btnsg"
-	         />
+	        android:background="#FF0000"
+	        android:textColor="#FFFFFF"
+	        android:textSize="12sp"
+	        android:visibility="gone"  />
         
     </LinearLayout>
 
