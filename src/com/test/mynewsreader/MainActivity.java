@@ -68,8 +68,8 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 	private ActionBarDrawerToggle mDrawerToggle;
 	private TextView txtuser;
 	private Button btnlg;
-	
-	
+	static Bundle sesi;
+	static int lfgs;
 	private boolean mIntentInProgress;
 	private ConnectionResult mConnectionResult;
 	
@@ -88,7 +88,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Bundle sesi = getIntent().getExtras();
+		sesi = getIntent().getExtras();
 		
 		//Connect ke Api Google (Agar bisa memanggil sesi login dari LoginActivity
 				mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -105,7 +105,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 		btnlg = (Button) findViewById(R.id.btnlg);
 		imgProfilePic = (ImageView) findViewById(R.id.imgProfilePic);
 		int lfg = getIntent().getIntExtra("lo", 0);
-		
+		lfgs=lfg;
 		if (sesi != null) {           
 			
 				//Cek Sesi Login Google+
