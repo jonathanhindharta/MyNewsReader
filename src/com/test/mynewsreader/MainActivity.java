@@ -33,21 +33,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
-
-
-
 import java.io.InputStream;
 import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -56,7 +54,7 @@ import android.widget.ListView;
 
 
 @SuppressLint("NewApi")
-public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener {
+public class MainActivity extends FragmentActivity implements ConnectionCallbacks, OnConnectionFailedListener {
 	
 	String userFb;
 	private static final String TAG = null;
@@ -68,9 +66,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 	private ListView mDrawerList;
 	private LinearLayout drawer1;
 	private ActionBarDrawerToggle mDrawerToggle;
-	TextView txtuser;
-	Button btnlg;
-	LoginActivity login = new LoginActivity();
+	private TextView txtuser;
+	private Button btnlg;
 	
 	
 	private boolean mIntentInProgress;
@@ -93,7 +90,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 		super.onCreate(savedInstanceState);
 		Bundle sesi = getIntent().getExtras();
 		
-		//Connect ke Api Google
+		//Connect ke Api Google (Agar bisa memanggil sesi login dari LoginActivity
 				mGoogleApiClient = new GoogleApiClient.Builder(this)
 				.addConnectionCallbacks(this)
 				.addOnConnectionFailedListener(this).addApi(Plus.API, null)
@@ -110,8 +107,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 		int lfg = getIntent().getIntExtra("lo", 0);
 		
 		if (sesi != null) {           
-			//txtsesi.setText("Ada Sesi fb");
 			
+				//Cek Sesi Login Google+
 				if (lfg==2) {
 					mGoogleApiClient.connect();
 					Session.setActiveSession((Session) sesi.getSerializable("gsession"));
@@ -123,8 +120,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 					new LoadProfileImage(imgProfilePic).execute(fotos);
 					
 				}
-				
-				else {
+				//Cek Sesi Login Facebook
+				else if (lfg==1) {
 					Session.setActiveSession((Session) sesi.getSerializable("fb_session"));
 					fsession = Session.getActiveSession();
 					final String users = getIntent().getStringExtra("userfb");
@@ -310,10 +307,10 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 		Fragment fragment = null;
 		switch (position) {
 		case 0:
-			fragment = new HomeFragment();
+			fragment = new RssUtamaFragment();
 			break;
 		case 1:
-			fragment = new TambahRSSFeedFragment();
+			fragment = new TambahRssFeedFragment();
 			break;
 		case 2:
 			fragment = new TwitterFragment();
@@ -325,7 +322,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 		}
 
 		if (fragment != null) {
-			FragmentManager fragmentManager = getFragmentManager();
+			FragmentManager fragmentManager = getSupportFragmentManager();
 			fragmentManager.beginTransaction()
 					.replace(R.id.frame_container, fragment).commit();
 

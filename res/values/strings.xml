@@ -6,6 +6,8 @@
 	<string name="app_id">1594985544069433</string>
 	<string name="saran">Anda Harus Login dengan Facebook/Google+ Terlebih Dahulu</string>
 	<string name="lgt">Log Out</string>
+	<string name="masuklr">Masukan Link URL RSS XML (Harus XML) :</string>
+	<string name="buka">Buka Link</string>
 	<string name="drawer_open">Slider Menu Opened</string>
     <string name="drawer_close">Slider Menu Closed</string>
     

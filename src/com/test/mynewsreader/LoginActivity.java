@@ -38,7 +38,7 @@ import com.google.android.gms.plus.model.people.Person;
 public class LoginActivity extends FragmentActivity implements OnClickListener,
 ConnectionCallbacks, OnConnectionFailedListener {
 	
-	ProgressDialog mProgressDialog;
+	private ProgressDialog mProgressDialog;
 	
 	//===============Variabel Untuk Login Facebook========================
 	private LoginButton loginBtn;
@@ -305,7 +305,6 @@ ConnectionCallbacks, OnConnectionFailedListener {
 	@Override
 	public void onConnected(Bundle arg0) {
 		if (lg==2) {
-			Log.v(TAG, "Berhasil Masuk lg=2");
 			if (mGoogleApiClient.isConnected()) {
 			Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
 			mGoogleApiClient.disconnect();

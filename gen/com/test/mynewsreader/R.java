@@ -1419,7 +1419,7 @@ containing a value of this type.
         public static final int com_facebook_list_section_header_background=0x7f02006b;
         public static final int com_facebook_loginbutton_silver=0x7f02006c;
         public static final int com_facebook_logo=0x7f02006d;
-        public static final int com_facebook_picker_default_separator_color=0x7f0200ae;
+        public static final int com_facebook_picker_default_separator_color=0x7f0200ab;
         public static final int com_facebook_picker_item_background=0x7f02006e;
         public static final int com_facebook_picker_list_focused=0x7f02006f;
         public static final int com_facebook_picker_list_longpressed=0x7f020070;
@@ -1469,21 +1469,18 @@ containing a value of this type.
         public static final int common_signin_btn_text_pressed_dark=0x7f02009c;
         public static final int common_signin_btn_text_pressed_light=0x7f02009d;
         public static final int counter_bg=0x7f02009e;
-        public static final int ic_communities=0x7f02009f;
-        public static final int ic_drawer=0x7f0200a0;
-        public static final int ic_home=0x7f0200a1;
-        public static final int ic_launcher=0x7f0200a2;
-        public static final int ic_pages=0x7f0200a3;
-        public static final int ic_people=0x7f0200a4;
-        public static final int ic_photos=0x7f0200a5;
-        public static final int ic_plusone_medium_off_client=0x7f0200a6;
-        public static final int ic_plusone_small_off_client=0x7f0200a7;
-        public static final int ic_plusone_standard_off_client=0x7f0200a8;
-        public static final int ic_plusone_tall_off_client=0x7f0200a9;
-        public static final int ic_whats_hot=0x7f0200aa;
-        public static final int list_item_bg_normal=0x7f0200ab;
-        public static final int list_item_bg_pressed=0x7f0200ac;
-        public static final int list_selector=0x7f0200ad;
+        public static final int ic_drawer=0x7f02009f;
+        public static final int ic_home=0x7f0200a0;
+        public static final int ic_launcher=0x7f0200a1;
+        public static final int ic_people=0x7f0200a2;
+        public static final int ic_photos=0x7f0200a3;
+        public static final int ic_plusone_medium_off_client=0x7f0200a4;
+        public static final int ic_plusone_small_off_client=0x7f0200a5;
+        public static final int ic_plusone_standard_off_client=0x7f0200a6;
+        public static final int ic_plusone_tall_off_client=0x7f0200a7;
+        public static final int list_item_bg_normal=0x7f0200a8;
+        public static final int list_item_bg_pressed=0x7f0200a9;
+        public static final int list_selector=0x7f0200aa;
     }
     public static final class id {
         public static final int action_bar=0x7f0a002a;
@@ -1497,13 +1494,14 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f0a0002;
         public static final int action_menu_presenter=0x7f0a0003;
         public static final int action_mode_close_button=0x7f0a0032;
-        public static final int action_settings=0x7f0a0074;
+        public static final int action_settings=0x7f0a007e;
         public static final int activity_chooser_view_content=0x7f0a0033;
         public static final int always=0x7f0a0013;
         public static final int beginning=0x7f0a001a;
         public static final int bottom=0x7f0a0022;
         public static final int box_count=0x7f0a001f;
         public static final int btn_sign_in=0x7f0a004c;
+        public static final int btnbuka=0x7f0a007b;
         public static final int btnlg=0x7f0a0055;
         public static final int button=0x7f0a0020;
         public static final int center=0x7f0a0025;
@@ -1546,6 +1544,9 @@ containing a value of this type.
         public static final int expand_activities_button=0x7f0a0034;
         public static final int expanded_menu=0x7f0a003a;
         public static final int fb_login_button=0x7f0a004b;
+        public static final int fragment_container=0x7f0a0072;
+        public static final int fragment_detail=0x7f0a0075;
+        public static final int fragment_tambah=0x7f0a0078;
         public static final int frame_container=0x7f0a0050;
         public static final int home=0x7f0a0000;
         public static final int homeAsUp=0x7f0a000e;
@@ -1553,12 +1554,14 @@ containing a value of this type.
         public static final int icon=0x7f0a0038;
         public static final int ifRoom=0x7f0a0015;
         public static final int image=0x7f0a0035;
-        public static final int imageView1=0x7f0a0073;
+        public static final int imageView1=0x7f0a007d;
         public static final int imgProfilePic=0x7f0a0053;
         public static final int inline=0x7f0a0023;
+        public static final int itemTitle=0x7f0a007c;
         public static final int large=0x7f0a001d;
         public static final int left=0x7f0a0026;
         public static final int listMode=0x7f0a000b;
+        public static final int listView=0x7f0a0073;
         public static final int list_item=0x7f0a0037;
         public static final int list_slidermenu=0x7f0a0056;
         public static final int middle=0x7f0a001c;
@@ -1566,6 +1569,7 @@ containing a value of this type.
         public static final int none=0x7f0a0007;
         public static final int normal=0x7f0a0008;
         public static final int picker_subtitle=0x7f0a0066;
+        public static final int progressBar=0x7f0a0074;
         public static final int progress_circular=0x7f0a0004;
         public static final int progress_horizontal=0x7f0a0005;
         public static final int radio=0x7f0a003d;
@@ -1597,11 +1601,14 @@ containing a value of this type.
         public static final int title=0x7f0a0039;
         public static final int top=0x7f0a0024;
         public static final int top_action_bar=0x7f0a002e;
-        public static final int txtLabel=0x7f0a0072;
+        public static final int txtLabel=0x7f0a0079;
+        public static final int txtjudul=0x7f0a0076;
+        public static final int txtlxu=0x7f0a007a;
         public static final int txtuser=0x7f0a0054;
         public static final int txtuser1=0x7f0a004e;
         public static final int up=0x7f0a002f;
         public static final int useLogo=0x7f0a0012;
+        public static final int webrss=0x7f0a0077;
         public static final int withText=0x7f0a0017;
     }
     public static final class integer {
@@ -1672,14 +1679,15 @@ containing a value of this type.
         public static final int com_facebook_tooltip_bubble=0x7f030026;
         public static final int com_facebook_usersettingsfragment=0x7f030027;
         public static final int drawer_list_item=0x7f030028;
-        public static final int fragment_community=0x7f030029;
-        public static final int fragment_find_people=0x7f03002a;
-        public static final int fragment_home=0x7f03002b;
-        public static final int fragment_pages=0x7f03002c;
-        public static final int fragment_photos=0x7f03002d;
-        public static final int fragment_whats_hot=0x7f03002e;
-        public static final int splashscreen=0x7f03002f;
-        public static final int support_simple_spinner_dropdown_item=0x7f030030;
+        public static final int fragment_home=0x7f030029;
+        public static final int fragment_layout=0x7f03002a;
+        public static final int fragment_layout_inside=0x7f03002b;
+        public static final int fragment_rss_detail=0x7f03002c;
+        public static final int fragment_tambah_rss=0x7f03002d;
+        public static final int fragment_twitter=0x7f03002e;
+        public static final int rss_item=0x7f03002f;
+        public static final int splashscreen=0x7f030030;
+        public static final int support_simple_spinner_dropdown_item=0x7f030031;
     }
     public static final class menu {
         public static final int main=0x7f0d0000;
@@ -1751,6 +1759,7 @@ containing a value of this type.
         [CHAR LIMIT=70] 
          */
         public static final int auth_client_using_bad_version_title=0x7f060014;
+        public static final int buka=0x7f06004a;
         public static final int com_facebook_choose_friends=0x7f060038;
         public static final int com_facebook_dialogloginactivity_ok_button=0x7f060027;
         public static final int com_facebook_image_download_unknown_error=0x7f060043;
@@ -1853,10 +1862,11 @@ containing a value of this type.
         public static final int common_signin_button_text_long=0x7f060013;
         /**  Content Description 
          */
-        public static final int desc_list_item_icon=0x7f06004b;
-        public static final int drawer_close=0x7f06004a;
-        public static final int drawer_open=0x7f060049;
+        public static final int desc_list_item_icon=0x7f06004d;
+        public static final int drawer_close=0x7f06004c;
+        public static final int drawer_open=0x7f06004b;
         public static final int lgt=0x7f060048;
+        public static final int masuklr=0x7f060049;
         public static final int saran=0x7f060047;
     }
     public static final class style {
