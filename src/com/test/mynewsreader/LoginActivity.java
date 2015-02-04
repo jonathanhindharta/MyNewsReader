@@ -13,8 +13,11 @@ import com.facebook.widget.LoginButton.UserInfoChangedCallback;
 import com.facebook.Request;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
@@ -101,8 +104,17 @@ ConnectionCallbacks, OnConnectionFailedListener {
 		lg = getIntent().getIntExtra("nc", 0);
 		//Jika lg bernilai lg>0 maka Halaman Login terbuka dari logout, jika tidak maka baru terbuka
 
-		
-
+		//Cek Ketersediaan Koneksi Internet
+		ConnectivityManager cn=(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo nf=cn.getActiveNetworkInfo();
+        if(nf != null && nf.isConnected()==true )
+        {
+           //Koneksi Tersedia, tidak memunculkan notifikasi
+        }
+        else
+        {
+            Toast.makeText(this, "Koneksi Internet Tidak Tersedia", Toast.LENGTH_LONG).show();
+        }
 
 	    //=====================Cek Sesi Facebook ada atau sudah ditutup==============================
 		
@@ -166,7 +178,11 @@ ConnectionCallbacks, OnConnectionFailedListener {
 	        } 
 
 	    //===================== Akhir Cek Sesi Facebook ada atau sudah ditutup==============================
-
+		
+		
+		
+		
+		
 	}
 
 	
@@ -180,49 +196,7 @@ ConnectionCallbacks, OnConnectionFailedListener {
 			}
 			
 			if (state.isOpened()) {
-				mProgressDialog = new ProgressDialog(LoginActivity.this);
-				mProgressDialog.setTitle("Verifikasi Login Facebook");
-				mProgressDialog.setMessage("Loading...");
-				mProgressDialog.setIndeterminate(false);
-				mProgressDialog.show();
-				mProgressDialog.setCancelable(false);
-	    	  loginBtn.setUserInfoChangedCallback(new UserInfoChangedCallback() {
-					@Override
-					public void onUserInfoFetched(GraphUser user) {
-						
-						if (user != null && konter==0) {
-							userFb = user.getName();
-							 idFb = user.getId();
-							//txtuser1.setText(userFb);
-							konter++;
-
-							         
-						} else {
-							
-						}
-					}
-				});
-	    	  Handler handler = new Handler();
-	    	    handler.postDelayed(new Runnable()
-	    	    {
-	    	        public void run()
-	    	        {
-	    	        	mProgressDialog.dismiss();
-	    	        	
-	    	            // Kill login activity and go back to main
-	    	           Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-	    	            Bundle moves = new Bundle();
-	    	    		moves.putString("userfb", userFb);
-	    	    		moves.putString("idfb", idFb);
-	    	    		moves.putInt("lo",1);
-	    	            intent.putExtra("fb_session", session);
-	    	            intent.putExtras(moves);
-	    	            
-	    	            finish();
-	    	            startActivity(intent); 
-	    	        	
-	    	        }
-	    	    }, 8000);
+				session.closeAndClearTokenInformation();
 				Log.d("FacebookSampleActivity", "Facebook session opened");
 			} else if (state.isClosed()) {
 				session.closeAndClearTokenInformation();
@@ -274,13 +248,16 @@ ConnectionCallbacks, OnConnectionFailedListener {
 		uiHelper.onActivityResult(requestCode, resultCode, data);
         final Session session = Session.getActiveSession();
         
-
+        if ((session != null  && session.isOpened())) {
 			finish();
-	        // Kill login activity and go back to main
 	       Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
 	        
 	        startActivity(intent); 
-		
+        }
+        
+		if (!mGoogleApiClient.isConnecting()) {
+			mGoogleApiClient.connect();
+		}
      	
 	    	    
 	}
@@ -356,10 +333,10 @@ ConnectionCallbacks, OnConnectionFailedListener {
 			}
 		}
 		//Proses Setelah login google+
-		else {
+		else if (mGoogleApiClient.isConnected()) {
 			mSignInClicked = false;
 			//Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
-
+			
 			// Get user's information
 			getProfileInformation();
 
