@@ -84,7 +84,6 @@ ConnectionCallbacks, OnConnectionFailedListener {
 		Bundle cek = getIntent().getExtras(); 
 		setContentView(R.layout.activity_login);		
 		loginBtn = (LoginButton) findViewById(R.id.fb_login_button);		
-		lg = getIntent().getIntExtra("nc", 0);
 		//=================Akhir Inisialisasi Var Login Facebook========================	
 		
 		//====================Inisialisasi Var Login Google+========================	
@@ -99,28 +98,89 @@ ConnectionCallbacks, OnConnectionFailedListener {
 		.addScope(Plus.SCOPE_PLUS_LOGIN).build();
 		//====================Akhir Inisialisasi Var Login Google+========================
 		
-		
+		lg = getIntent().getIntExtra("nc", 0);
 		//Jika lg bernilai lg>0 maka Halaman Login terbuka dari logout, jika tidak maka baru terbuka
-		if (lg==1) {
-			session.getActiveSession().closeAndClearTokenInformation();
-			
-			//session=null;
-			Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-			finish();
-            // Kill login activity and go back to main
-			session.getActiveSession().closeAndClearTokenInformation();
-			
-            startActivity(intent); 
-            session.getActiveSession().closeAndClearTokenInformation();
-		}
+
 		
-		//Log.v(TAG,"Nilai masuk : "+ session.isOpened()); 
+
 
 	    //=====================Cek Sesi Facebook ada atau sudah ditutup==============================
 		
 		if ((session != null  && session.isOpened())) {
+				
+			
+				if (lg==1) {
+					
+		            // Kill login activity and go back to main
+					session.getActiveSession().closeAndClearTokenInformation();
+					
+		            
+				}
+				else {
+					mProgressDialog = new ProgressDialog(LoginActivity.this);
+					mProgressDialog.setTitle("Verifikasi Login Facebook");
+					mProgressDialog.setMessage("Loading...");
+					mProgressDialog.setIndeterminate(false);
+					mProgressDialog.show();
+					mProgressDialog.setCancelable(false);
+		    	  loginBtn.setUserInfoChangedCallback(new UserInfoChangedCallback() {
+						@Override
+						public void onUserInfoFetched(GraphUser user) {
+							
+							if (user != null && konter==0) {
+								userFb = user.getName();
+								 idFb = user.getId();
+								//txtuser1.setText(userFb);
+								konter++;
 
-	    	  	mProgressDialog = new ProgressDialog(LoginActivity.this);
+								         
+							} else {
+								
+							}
+						}
+					});
+		    	  Handler handler = new Handler();
+		    	    handler.postDelayed(new Runnable()
+		    	    {
+		    	        public void run()
+		    	        {
+		    	        	mProgressDialog.dismiss();
+		    	        	
+		    	            // Kill login activity and go back to main
+		    	           Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+		    	            Bundle moves = new Bundle();
+		    	    		moves.putString("userfb", userFb);
+		    	    		moves.putString("idfb", idFb);
+		    	    		moves.putInt("lo",1);
+		    	            intent.putExtra("fb_session", session);
+		    	            intent.putExtras(moves);
+		    	            
+		    	            finish();
+		    	            startActivity(intent); 
+		    	        	
+		    	        }
+		    	    }, 8000);
+					
+				}
+	    	  		 
+	        } 
+
+	    //===================== Akhir Cek Sesi Facebook ada atau sudah ditutup==============================
+
+	}
+
+	
+	//=======================Method Implementasi Untuk Login Facebook===================================
+	private Session.StatusCallback statusCallback = new Session.StatusCallback() {
+		@Override
+		public void call(final Session session, SessionState state,
+				Exception exception) {
+			if (lg==1){
+				session.closeAndClearTokenInformation();
+			}
+			
+			if (state.isOpened()) {
+				mProgressDialog = new ProgressDialog(LoginActivity.this);
 				mProgressDialog.setTitle("Verifikasi Login Facebook");
 				mProgressDialog.setMessage("Loading...");
 				mProgressDialog.setIndeterminate(false);
@@ -162,26 +222,10 @@ ConnectionCallbacks, OnConnectionFailedListener {
 	    	            startActivity(intent); 
 	    	        	
 	    	        }
-	    	    }, 8000);	 
-	        }
-	      else {
-	    	  
-	      }
-	    //===================== Akhir Cek Sesi Facebook ada atau sudah ditutup==============================
-
-	}
-
-	
-	//=======================Method Implementasi Untuk Login Facebook===================================
-	private Session.StatusCallback statusCallback = new Session.StatusCallback() {
-		@Override
-		public void call(Session session, SessionState state,
-				Exception exception) {
-			if (state.isOpened()) {
-			
+	    	    }, 8000);
 				Log.d("FacebookSampleActivity", "Facebook session opened");
 			} else if (state.isClosed()) {
-			
+				session.closeAndClearTokenInformation();
 				Log.d("FacebookSampleActivity", "Facebook session closed");
 			}
 		}
@@ -301,16 +345,17 @@ ConnectionCallbacks, OnConnectionFailedListener {
 	}
 	
 	
-	
+	//Aksi Setelah login dengan google+
 	@Override
 	public void onConnected(Bundle arg0) {
+		//Jika lg=2 maka berarti halaman login dipanggil setelah logout dari MainActivity
 		if (lg==2) {
 			if (mGoogleApiClient.isConnected()) {
 			Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
 			mGoogleApiClient.disconnect();
 			}
 		}
-		
+		//Proses Setelah login google+
 		else {
 			mSignInClicked = false;
 			//Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();

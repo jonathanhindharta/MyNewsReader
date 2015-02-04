@@ -24,7 +24,7 @@ public class RssUtamaFragment extends Fragment {
 		}
         return rootView;
     }
-	
+	// Memanggil tampilan fragment berupa list judul Rss dari Activity RssFragment
 	private void addRssFragment() {
 		FragmentManager manager = ((FragmentActivity) getActivity()).getSupportFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();

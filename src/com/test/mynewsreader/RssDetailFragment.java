@@ -1,7 +1,14 @@
 package com.test.mynewsreader;
 
 
+import com.facebook.FacebookException;
+import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.widget.FacebookDialog;
+import com.facebook.widget.FacebookDialog.PendingCall;
+import com.facebook.widget.WebDialog;
+import com.facebook.widget.WebDialog.OnCompleteListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -17,6 +24,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,18 +33,29 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class RssDetailFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener  {
 	
 	public RssDetailFragment(){}
 	private TextView txtjudul;
 	private WebView webrss;
-	private Button btnsg;
+	private Button btnsg,btnsf;
 	private GoogleApiClient mGoogleApiClient;	
+	String wurl, wjudul;
+	private UiLifecycleHelper uiHelper;
 	//private MainActivity ma = new MainActivity();
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+		 
+		View rootView = inflater.inflate(R.layout.fragment_rss_detail, container, false);
+        webrss = (WebView) rootView.findViewById(R.id.webrss); 
+		txtjudul = (TextView) rootView.findViewById(R.id.txtjudul);
+		btnsg = (Button) rootView.findViewById(R.id.btnsg);
+		btnsf = (Button) rootView.findViewById(R.id.btnsf);
+		uiHelper = new UiLifecycleHelper(getActivity(), null);
+	    uiHelper.onCreate(savedInstanceState);
 		
 		//Connect ke Api Google (Agar bisa memanggil sesi login dari MainActivity)
 		mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
@@ -52,27 +71,24 @@ public class RssDetailFragment extends Fragment implements ConnectionCallbacks, 
 				mGoogleApiClient.connect();
 				Session.setActiveSession((Session) MainActivity.sesi.getSerializable("gsession"));
 				MainActivity.gsession = Session.getActiveSession();
-				
+				btnsg.setVisibility(View.VISIBLE);
 				
 			}
 			//Cek Sesi Login Facebook
 			else if (MainActivity.lfgs==1) {
 				Session.setActiveSession((Session) MainActivity.sesi.getSerializable("fb_session"));
 				MainActivity.fsession = Session.getActiveSession();
-				
+				btnsf.setVisibility(View.VISIBLE);
 			}
 			
 			
 		}
 
 		
-        View rootView = inflater.inflate(R.layout.fragment_rss_detail, container, false);
-        webrss = (WebView) rootView.findViewById(R.id.webrss); 
-		txtjudul = (TextView) rootView.findViewById(R.id.txtjudul);
-		btnsg = (Button) rootView.findViewById(R.id.btnsg);
+       
 		
-		final String wurl = this.getArguments().getString("urls");
-		String wjudul =this.getArguments().getString("juduls");
+		wurl = this.getArguments().getString("urls");
+		wjudul =this.getArguments().getString("juduls");
 		String wdesc = this.getArguments().getString("descs");
 		
 		txtjudul.setText(wjudul);
@@ -92,20 +108,32 @@ public class RssDetailFragment extends Fragment implements ConnectionCallbacks, 
 		btnsg.setOnClickListener(new OnClickListener() {
 			  @Override
 			  public void onClick(View v) {
-			    // Launch the Google+ share dialog with attribution to your app.
+			    // Memunculkan Google+ SHare Dialog
 			    Intent shareIntent = new PlusShare.Builder(getActivity())
 			      .setType("text/plain")
-			      .setText("Test Share ke Google+")
+			      .setText("")
 			      .setContentUrl(Uri.parse(wurl))
 			      .getIntent();
 
 			    startActivityForResult(shareIntent, 0);
 			  }
 			});
+		
+		
+		btnsf.setOnClickListener(new OnClickListener() {
+			  @Override
+			  public void onClick(View v) {
+			    // Memunculkan Facebook Share Dialog
+				publishFeedDialog();
+			  }
+			});
+		
+
 
         return rootView;
     }
 	
+//=================Method Implementasi Login Google+==========================
 	@Override
 	public void onConnected(Bundle connectionHint) {
 		// TODO Auto-generated method stub
@@ -124,7 +152,105 @@ public class RssDetailFragment extends Fragment implements ConnectionCallbacks, 
 		// TODO Auto-generated method stub
 		mGoogleApiClient.connect();
 	}
+//=================Akhir Method Implementasi Login Google+==========================	
+	
+//=================Method untuk Implementasi UI Share Facebook======================	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    super.onActivityResult(requestCode, resultCode, data);
 
+	    uiHelper.onActivityResult(requestCode, resultCode, data, new FacebookDialog.Callback() {
 
+			@Override
+			public void onComplete(PendingCall pendingCall, Bundle data) {
+				// TODO Auto-generated method stub
+				
+			}
 
+			@Override
+			public void onError(PendingCall pendingCall, Exception error,
+					Bundle data) {
+				// TODO Auto-generated method stub
+				
+			}
+	        
+	    });
+	}
+	
+	@Override
+	public void onResume() {
+	    super.onResume();
+	    uiHelper.onResume();
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+	    super.onSaveInstanceState(outState);
+	    uiHelper.onSaveInstanceState(outState);
+	}
+
+	@Override
+	public void onPause() {
+	    super.onPause();
+	    uiHelper.onPause();
+	}
+
+	@Override
+	public void onDestroy() {
+	    super.onDestroy();
+	    uiHelper.onDestroy();
+	}
+	
+	//Share Dialog Facebook
+	private void publishFeedDialog() {
+	    Bundle params = new Bundle();
+	    params.putString("name", wjudul);
+	    
+	    params.putString("link", wurl);
+	    
+
+	    WebDialog feedDialog = (
+	        new WebDialog.FeedDialogBuilder(getActivity(),
+	            Session.getActiveSession(),
+	            params))
+	        .setOnCompleteListener(new OnCompleteListener() {
+
+	            @Override
+	            public void onComplete(Bundle values,
+	                FacebookException error) {
+	                if (error == null) {
+	                    // When the story is posted, echo the success
+	                    // and the post Id.
+	                    final String postId = values.getString("post_id");
+	                    if (postId != null) {
+	                        Toast.makeText(getActivity(),
+	                            "Posted story, id: "+postId,
+	                            Toast.LENGTH_SHORT).show();
+	                    } else {
+	                        // User clicked the Cancel button
+	                        Toast.makeText(getActivity().getApplicationContext(), 
+	                            "Publish cancelled", 
+	                            Toast.LENGTH_SHORT).show();
+	                    }
+	                } else if (error instanceof FacebookOperationCanceledException) {
+	                    // User clicked the "x" button
+	                    Toast.makeText(getActivity().getApplicationContext(), 
+	                        "Publish cancelled", 
+	                        Toast.LENGTH_SHORT).show();
+	                } else {
+	                    // Generic, ex: network error
+	                    Toast.makeText(getActivity().getApplicationContext(), 
+	                        "Error posting story", 
+	                        Toast.LENGTH_SHORT).show();
+	                }
+	            }
+
+				
+
+	        })
+	        .build();
+	    feedDialog.show();
+	}
+
+//================= AKhir Method untuk Implementasi UI Share Facebook======================	
 }

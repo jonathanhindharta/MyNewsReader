@@ -104,7 +104,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 		txtuser = (TextView) findViewById(R.id.txtuser);
 		btnlg = (Button) findViewById(R.id.btnlg);
 		imgProfilePic = (ImageView) findViewById(R.id.imgProfilePic);
-		int lfg = getIntent().getIntExtra("lo", 0);
+		final int lfg = getIntent().getIntExtra("lo", 0);
 		lfgs=lfg;
 		if (sesi != null) {           
 			
@@ -138,8 +138,8 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 		//Untuk LogOut
 		btnlg.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
-				// Execute Description AsyncTask
-				if (gsession!= null  || gsession.isOpened()) {
+				//Log Out Jika sesi google+ ada
+				if (lfg==2) {
 					Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
 					mGoogleApiClient.disconnect();
 					gsession.getActiveSession().closeAndClearTokenInformation();
@@ -153,6 +153,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 					startActivity(intent);
 					
 				}
+				//Log Out Jika sesi facebook ada
 				else {
 						if (fsession != null  || fsession.isOpened()) {
 	
@@ -160,12 +161,13 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 					            fsession.getActiveSession().closeAndClearTokenInformation();
 					            //session=null;
 					            //clear your preferences if saved
-					            finish();
 					            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
 					            Bundle lt = new Bundle();
 					            lt.putInt("nc", 1);
-			    	    		
-			    	            intent.putExtras(lt);
+					            intent.putExtras(lt);
+					            finish();
+					            			    	    		
+			    	            
 					            startActivity(intent);
 					        }
 					    } else {
