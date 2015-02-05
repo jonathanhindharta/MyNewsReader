@@ -22,22 +22,18 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.PlusShare;
 import com.test.mynewsreader.MainActivity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
+
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
+
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,7 +47,7 @@ public class RssDetailFragment extends Fragment implements ConnectionCallbacks, 
 	private GoogleApiClient mGoogleApiClient;	
 	String wurl, wjudul;
 	private UiLifecycleHelper uiHelper;
-	//private MainActivity ma = new MainActivity();
+
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -90,28 +86,17 @@ public class RssDetailFragment extends Fragment implements ConnectionCallbacks, 
 			
 			
 		}
-
-		
-       
-		
+		//Ambil Data bundle dari list judul yang dipilih
 		wurl = this.getArguments().getString("urls");
 		wjudul =this.getArguments().getString("juduls");
 		String wdesc = this.getArguments().getString("descs");
 		
 		txtjudul.setText(wjudul);
 		webrss.getSettings().setJavaScriptEnabled(true);
-		//webrss.loadUrl(wurl);
+
 		webrss.loadDataWithBaseURL(null, wdesc, "text/html", "UTF-8", null);
-/*		webrss.setWebViewClient(new WebViewClient()
-        {
-            // Override URL (Menentukan Aksi ketika sebuah dipilih)
-            public boolean shouldOverrideUrlLoading(WebView view, String url)
-            {
-            	webrss.loadUrl(url);
-				return true;
-            }
-        }); */
-		
+
+		//Button Share google+
 		btnsg.setOnClickListener(new OnClickListener() {
 			  @Override
 			  public void onClick(View v) {
@@ -126,7 +111,7 @@ public class RssDetailFragment extends Fragment implements ConnectionCallbacks, 
 			  }
 			});
 		
-		
+		//Button Share Facebook
 		btnsf.setOnClickListener(new OnClickListener() {
 			  @Override
 			  public void onClick(View v) {
@@ -208,7 +193,7 @@ public class RssDetailFragment extends Fragment implements ConnectionCallbacks, 
 	    uiHelper.onDestroy();
 	}
 	
-	//Share Dialog Facebook
+	//Method untuk Share Dialog Facebook
 	private void publishFeedDialog() {
 	    Bundle params = new Bundle();
 	    params.putString("name", wjudul);

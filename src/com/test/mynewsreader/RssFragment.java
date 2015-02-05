@@ -1,11 +1,15 @@
+/** Aplikasi New Reader
+ * Di Buat oleh Jonathan Hindharta**/
+//class fragment untuk menampilkan list Rss Feed
 package com.test.mynewsreader;
 
-//class fragment untuk menampilkan list Rss Feed
 
 import java.util.List;
 
+
 import android.content.Context;
 import android.content.Intent;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,7 +32,8 @@ public class RssFragment extends Fragment implements OnItemClickListener {
 	private ProgressBar progressBar;
 	private ListView listView;
 	private View view;
-
+	Context context;
+	public static final String ITEMS = "Item";
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -69,6 +74,7 @@ public class RssFragment extends Fragment implements OnItemClickListener {
 		protected void onReceiveResult(int resultCode, Bundle resultData) {
 			progressBar.setVisibility(View.GONE);
 			List<RssItem> items = (List<RssItem>) resultData.getSerializable(RssService.ITEMS);
+			
 			if (items != null) {
 				RssAdapter adapter = new RssAdapter(getActivity(), items);
 				listView.setAdapter(adapter);

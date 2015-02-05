@@ -117,6 +117,7 @@ ConnectionCallbacks, OnConnectionFailedListener {
 					
 		            
 				}
+				//Jika Ada Sesi tetapi tidak ada koneksi
 				else if (ki==1) {
 					Toast.makeText(this, "Silahkan Aktifkan Koneksi Anda Terlebih Dahulu\n"
 							+ "Lalu Buka Kembali Aplikasi\n"
@@ -331,6 +332,7 @@ ConnectionCallbacks, OnConnectionFailedListener {
 			mGoogleApiClient.disconnect();
 			}
 		}
+		//Jika Ada Sesi tetapi tidak ada koneksi
 		else if (ki==1) {
 			Toast.makeText(this, "Silahkan Aktifkan Koneksi Anda Terlebih Dahulu\n"
 					+ "Lalu Buka Kembali Aplikasi\n"

@@ -22,23 +22,5 @@ public class TwitterFragment extends Fragment {
         return rootView;
     }
 	
-	//Aksi Saat Tombol Backpressed Ditekan
-	  public void onBackPressed()
-	  {
-		  AlertDialog.Builder mauKeluar = new AlertDialog.Builder(getActivity());
-		mauKeluar.setMessage("Anda Yakin Ingin Keluar dari Aplikasi Ini ?").setCancelable(false)
-		.setPositiveButton("Ya", new AlertDialog.OnClickListener(){
-			public void onClick(DialogInterface arg0, int arg1){
-				getActivity().finish();;
-			}
-		})
-		.setNegativeButton("Tidak", new AlertDialog.OnClickListener(){
-			public void onClick(DialogInterface dialog, int arg1){
-				dialog.cancel();
-			}
-		});
-		AlertDialog dialog1 = mauKeluar.create();
-		dialog1.setTitle("My News Reader");
-		dialog1.show();
-	  }
+
 }
