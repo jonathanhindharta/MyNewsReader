@@ -4,9 +4,10 @@
     <string name="app_name">My News Reader</string>
     <string name="action_settings">Settings</string>
 	<string name="app_id">1594985544069433</string>
-	<string name="saran">Anda Harus Login dengan Facebook/Google+ Terlebih Dahulu</string>
+	<string name="saran">Anda Harus Login dengan Facebook/Google+ Terlebih Dahulu\nJika Sudah Login Silahkan Tunggu Verifikasi Account</string>
+	 <string name="cp">Aplikasi News Reader, dibuat Oleh Jonathan Hindharta</string>   
 	<string name="lgt">Log Out</string>
-	<string name="masuklr">Masukan Link URL RSS (XML) :</string>
+	<string name="masuklr">Masukan Link URL RSS (XML) :\nContoh:\nhttp://news.yahoo.com/rss/topstories</string>
 	<string name="buka">Buka Link</string>
 	<string name="btnsf">Share to Facebook</string>
 	<string name="btnsg">Share to Google+</string>

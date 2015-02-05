@@ -1,0 +1,9 @@
+User Manual My News Reader
+
+
+1. Untuk menggunakan aplikasi user diharuskan login dengan menggunakan Facebook/Google+
+2. Jika sudah login, saat user keluar dari aplikasi dan masuk kembali, user tidak perlu login kembali
+3. Login akan mempengaruhi nantinya artikel bisa dishare dengan Facebook/Google+
+4. Untuk membuka Rss Feed Baru user dapat memilih menu Tambah Rss Feed
+5. Untuk membuka detail dari daftar rss, user tinggal memilih salah satu judul yang diinginkan
+6. Untuk merefresh atau kembali ke daftar rss, user tinggal memilih menu Rss

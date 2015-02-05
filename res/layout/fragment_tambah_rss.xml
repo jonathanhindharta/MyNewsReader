@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Untuk Tampilan Tambah Rss Baru -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fragment_tambah"
     android:layout_width="match_parent"
@@ -12,7 +13,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="52dp"
         android:text="@string/masuklr"
-        android:textSize="16sp" />
+        android:textSize="16sp" 
+        android:gravity="center_horizontal"/>
 
     <EditText
         android:id="@+id/txtlxu"

@@ -1,3 +1,4 @@
+<!-- Untuk Tampilan Halaman Utama Setelah Login -->
 <android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:facebook="http://schemas.android.com/apk/res-auto"
