@@ -78,7 +78,7 @@ public class RssFragment extends Fragment implements OnItemClickListener {
 			}
 		};
 	};
-	//Menentukan Aksi ketika salah satu list dpilih
+	//Menentukan Aksi ketika salah satu list dipilih
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		RssAdapter adapter = (RssAdapter) parent.getAdapter();

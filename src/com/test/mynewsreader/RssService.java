@@ -1,3 +1,8 @@
+/** Aplikasi New Reader
+ * Di Buat oleh Jonathan Hindharta**/
+
+//Activity untuk service pada aplikasi
+
 package com.test.mynewsreader;
 
 import java.io.IOException;
@@ -8,7 +13,9 @@ import java.util.List;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.app.AlertDialog;
 import android.app.IntentService;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
@@ -16,7 +23,7 @@ import android.text.Editable;
 import android.util.Log;
 
 public class RssService extends IntentService {
-
+	//Link XML yang akan ditampilkan listnya
 	public static String RSS_LINK = "http://rss.detik.com/index.php/detikcom";
 	public static final String ITEMS = "items";
 	public static final String RECEIVER = "receiver";
@@ -50,6 +57,8 @@ public class RssService extends IntentService {
 		} catch (IOException e) {
 			Log.w(Constants.TAG, "Exception while retrieving the input stream", e);
 			return null;
+			
+			
 		}
 	}
 }

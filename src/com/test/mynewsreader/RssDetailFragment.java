@@ -1,3 +1,8 @@
+/** Aplikasi New Reader
+ * Di Buat oleh Jonathan Hindharta**/
+
+//Activity untuk melihat detail berita
+
 package com.test.mynewsreader;
 
 
@@ -17,6 +22,8 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.PlusShare;
 import com.test.mynewsreader.MainActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -224,23 +231,23 @@ public class RssDetailFragment extends Fragment implements ConnectionCallbacks, 
 	                    final String postId = values.getString("post_id");
 	                    if (postId != null) {
 	                        Toast.makeText(getActivity(),
-	                            "Posted story, id: "+postId,
+	                            "Feed Shared",
 	                            Toast.LENGTH_SHORT).show();
 	                    } else {
 	                        // User clicked the Cancel button
 	                        Toast.makeText(getActivity().getApplicationContext(), 
-	                            "Publish cancelled", 
+	                            "Share cancelled", 
 	                            Toast.LENGTH_SHORT).show();
 	                    }
 	                } else if (error instanceof FacebookOperationCanceledException) {
 	                    // User clicked the "x" button
 	                    Toast.makeText(getActivity().getApplicationContext(), 
-	                        "Publish cancelled", 
+	                        "Share cancelled", 
 	                        Toast.LENGTH_SHORT).show();
 	                } else {
 	                    // Generic, ex: network error
 	                    Toast.makeText(getActivity().getApplicationContext(), 
-	                        "Error posting story", 
+	                        "Error posting feed", 
 	                        Toast.LENGTH_SHORT).show();
 	                }
 	            }
@@ -253,4 +260,6 @@ public class RssDetailFragment extends Fragment implements ConnectionCallbacks, 
 	}
 
 //================= AKhir Method untuk Implementasi UI Share Facebook======================	
+	
+	
 }

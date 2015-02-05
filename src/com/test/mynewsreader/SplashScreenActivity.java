@@ -1,3 +1,6 @@
+/** Aplikasi New Reader
+ * Di Buat oleh Jonathan Hindharta**/
+
 //Activity untuk Splash Screen
 package com.test.mynewsreader;
 

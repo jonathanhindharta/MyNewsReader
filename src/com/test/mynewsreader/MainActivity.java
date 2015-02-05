@@ -1,3 +1,7 @@
+/** Aplikasi New Reader
+ * Di Buat oleh Jonathan Hindharta**/
+
+//Activity utama untuk load list rss feed
 package com.test.mynewsreader;
 
 import com.test.mynewsreader.adapter.NavDrawerListAdapter;
@@ -19,6 +23,7 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.plus.Plus;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,11 +38,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
+
+
 import java.io.InputStream;
 import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -425,5 +433,29 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 		
 	}
 	
+	//Saat Tombol Back Ditekan
+	  @Override
+	  public void onBackPressed()
+	  {
+		  AlertDialog.Builder mauKeluar = new AlertDialog.Builder(MainActivity.this);
+		mauKeluar.setMessage("Anda Yakin Ingin Keluar dari Aplikasi Ini ?").setCancelable(false)
+		.setPositiveButton("Ya", new AlertDialog.OnClickListener(){
+			public void onClick(DialogInterface arg0, int arg1){
+				finish();
+			}
+		})
+		.setNegativeButton("Tidak", new AlertDialog.OnClickListener(){
+			public void onClick(DialogInterface dialog, int arg1){
+				dialog.cancel();
+			}
+		});
+		AlertDialog dialog1 = mauKeluar.create();
+		dialog1.setTitle("My News Reader");
+		dialog1.show();
+
+
+	  }
+	
+
 
 }

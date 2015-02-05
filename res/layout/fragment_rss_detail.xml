@@ -29,24 +29,24 @@
 	     
 	     <Button
 	        android:id="@+id/btnsf"
-	        android:layout_width="0dp"
+	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_weight="0.1"
 	        android:text="@string/btnsf"
-	        android:background="#0000FF"
+	        android:background="@drawable/flbutton"
 	        android:textColor="#FFFFFF"
-	        android:textSize="12sp"
-	        android:visibility="gone" />
+	        android:textSize="14sp"
+	        android:visibility="gone"
+	        android:radius="3dp" />
          <Button
 	        android:id="@+id/btnsg"
-	        android:layout_width="0dp"
+	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_weight="0.1"
 	        android:text="@string/btnsg"
-	        android:background="#FF0000"
+	        android:background="@drawable/glbutton"
 	        android:textColor="#FFFFFF"
-	        android:textSize="12sp"
-	        android:visibility="gone"  />
+	        android:textSize="14sp"
+	        android:visibility="gone"
+	        android:radius="3dp" />
         
     </LinearLayout>
 

@@ -1,3 +1,7 @@
+/** Aplikasi New Reader
+ * Di Buat oleh Jonathan Hindharta**/
+
+//Activity untuk parsing tag xml
 package com.test.mynewsreader;
 
 import java.io.IOException;

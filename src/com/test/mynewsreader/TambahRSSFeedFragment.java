@@ -1,7 +1,10 @@
-// Class Untuk Membuka Link Rss XML baru
+/** Aplikasi New Reader
+ * Di Buat oleh Jonathan Hindharta**/
+
+//Activity untuk membuka link Rss Inputan User
 package com.test.mynewsreader;
 
-import android.content.Intent;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -42,4 +45,6 @@ public class TambahRssFeedFragment extends Fragment {
         
         return rootView;
     }
+	
+
 }

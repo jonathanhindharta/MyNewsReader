@@ -1,3 +1,5 @@
+/** Aplikasi New Reader
+ * Di Buat oleh Jonathan Hindharta**/
 //Activity untuk Login
 package com.test.mynewsreader;
 
@@ -10,10 +12,12 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.facebook.widget.LoginButton.UserInfoChangedCallback;
-import com.facebook.Request;
 
+
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.net.ConnectivityManager;
@@ -32,11 +36,8 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
-
 
 public class LoginActivity extends FragmentActivity implements OnClickListener,
 ConnectionCallbacks, OnConnectionFailedListener {
@@ -46,8 +47,7 @@ ConnectionCallbacks, OnConnectionFailedListener {
 	//===============Variabel Untuk Login Facebook========================
 	private LoginButton loginBtn;
 	String userFb, idFb;
-	int lg =0;
-	int konter=0;
+	int lg =0, konter=0, ki=0;
 	Session session;
 	private UiLifecycleHelper uiHelper;
 	private static final List<String> PERMISSIONS = Arrays.asList("publish_actions");
@@ -57,9 +57,7 @@ ConnectionCallbacks, OnConnectionFailedListener {
 	
 	//==================Variabel untuk Login Google+==========================
 	private static final int RC_SIGN_IN = 0;
-	// Logcat tag
-	//private static final String TAG = "MainActivity";
-
+	
 	// Profile pic image size in pixels
 	private static final int PROFILE_PIC_SIZE = 100;
 
@@ -101,32 +99,29 @@ ConnectionCallbacks, OnConnectionFailedListener {
 		.addScope(Plus.SCOPE_PLUS_LOGIN).build();
 		//====================Akhir Inisialisasi Var Login Google+========================
 		
+		//variabel untuk flag
 		lg = getIntent().getIntExtra("nc", 0);
 		//Jika lg bernilai lg>0 maka Halaman Login terbuka dari logout, jika tidak maka baru terbuka
-
-		//Cek Ketersediaan Koneksi Internet
-		ConnectivityManager cn=(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo nf=cn.getActiveNetworkInfo();
-        if(nf != null && nf.isConnected()==true )
-        {
-           //Koneksi Tersedia, tidak memunculkan notifikasi
-        }
-        else
-        {
-            Toast.makeText(this, "Koneksi Internet Tidak Tersedia", Toast.LENGTH_LONG).show();
-        }
-
+		
+		//Cek Koneksi Internet terlebih dahulu
+		cekKoneksiInternet();
 	    //=====================Cek Sesi Facebook ada atau sudah ditutup==============================
 		
 		if ((session != null  && session.isOpened())) {
 				
-			
+				
 				if (lg==1) {
 					
 		            // Kill login activity and go back to main
 					session.getActiveSession().closeAndClearTokenInformation();
 					
 		            
+				}
+				else if (ki==1) {
+					Toast.makeText(this, "Silahkan Aktifkan Koneksi Anda Terlebih Dahulu\n"
+							+ "Lalu Buka Kembali Aplikasi\n"
+							+ "Untuk Mengakses Sesi Login Sebelumnya", Toast.LENGTH_LONG).show();
+					finish();
 				}
 				else {
 					mProgressDialog = new ProgressDialog(LoginActivity.this);
@@ -239,7 +234,11 @@ ConnectionCallbacks, OnConnectionFailedListener {
 		super.onDestroy();
 		uiHelper.onDestroy();
 	}
-	//Untuk Aksi Setelah Login Facebook
+	
+	
+	//=======================Akhir Method Implementasi Untuk Login Facebook===================================
+	
+	//Untuk Aksi Setelah Hasil Login Facebook/Google+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -247,15 +246,15 @@ ConnectionCallbacks, OnConnectionFailedListener {
 	          .onActivityResult(this, requestCode, resultCode, data);
 		uiHelper.onActivityResult(requestCode, resultCode, data);
         final Session session = Session.getActiveSession();
-        
+        //Jika login dengan facebook
         if ((session != null  && session.isOpened())) {
 			finish();
 	       Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
 	        
 	        startActivity(intent); 
         }
-        
-		if (!mGoogleApiClient.isConnecting()) {
+        //Jika login dengan google+
+        else if (!mGoogleApiClient.isConnecting()) {
 			mGoogleApiClient.connect();
 		}
      	
@@ -268,7 +267,7 @@ ConnectionCallbacks, OnConnectionFailedListener {
 		uiHelper.onSaveInstanceState(savedState);
 	}
 	
-	//=======================Akhir Method Implementasi Untuk Login Facebook===================================
+	
 	
 	
 	//======================= Method Implementasi Untuk Login Google+===================================
@@ -331,6 +330,12 @@ ConnectionCallbacks, OnConnectionFailedListener {
 			Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
 			mGoogleApiClient.disconnect();
 			}
+		}
+		else if (ki==1) {
+			Toast.makeText(this, "Silahkan Aktifkan Koneksi Anda Terlebih Dahulu\n"
+					+ "Lalu Buka Kembali Aplikasi\n"
+					+ "Untuk Mengakses Sesi Login Sebelumnya", Toast.LENGTH_LONG).show();
+			finish();
 		}
 		//Proses Setelah login google+
 		else if (mGoogleApiClient.isConnected()) {
@@ -411,6 +416,7 @@ ConnectionCallbacks, OnConnectionFailedListener {
 
 	/**
 	 * Button on click listener
+	 * Mennetukan aksi jika button sign in google+ diklik
 	 * */
 	@Override
 	public void onClick(View v) {
@@ -432,6 +438,47 @@ ConnectionCallbacks, OnConnectionFailedListener {
 			resolveSignInError();
 		}
 	}
+	
+	//Method Untuk Cek Koneksi Internet
+	public void cekKoneksiInternet()
+	{
+		//Cek Ketersediaan Koneksi Internet
+		ConnectivityManager cn=(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo nf=cn.getActiveNetworkInfo();
+        if(nf != null && nf.isConnected()==true )
+        {
+           //Koneksi Tersedia, tidak memunculkan notifikasi
+        }
+        else
+        {
+            Toast.makeText(this, "Koneksi Internet Tidak Tersedia\nSilahkan Aktifkan Koneksi Anda Terlebih Dahulu", Toast.LENGTH_LONG).show();
+            ki=1;
+        }
+
+	}
+	
+	//Saat Tombol Back Ditekan
+	  @Override
+	  public void onBackPressed()
+	  {
+		  AlertDialog.Builder mauKeluar = new AlertDialog.Builder(LoginActivity.this);
+		mauKeluar.setMessage("Anda Yakin Ingin Keluar dari Aplikasi Ini ?").setCancelable(false)
+		.setPositiveButton("Ya", new AlertDialog.OnClickListener(){
+			public void onClick(DialogInterface arg0, int arg1){
+				finish();
+			}
+		})
+		.setNegativeButton("Tidak", new AlertDialog.OnClickListener(){
+			public void onClick(DialogInterface dialog, int arg1){
+				dialog.cancel();
+			}
+		});
+		AlertDialog dialog1 = mauKeluar.create();
+		dialog1.setTitle("My News Reader");
+		dialog1.show();
+
+
+	  }
 
 	
 	

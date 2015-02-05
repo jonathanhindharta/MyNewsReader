@@ -1,4 +1,9 @@
+/** Aplikasi New Reader
+ * Di Buat oleh Jonathan Hindharta**/
+
+//Activity untuk tampilan list rss feed
 package com.test.mynewsreader;
+
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -38,4 +43,6 @@ public class RssUtamaFragment extends Fragment {
 		super.onSaveInstanceState(outState);
 		outState.putBoolean("fragment_added", true);
 	}
+	
+	
 }
