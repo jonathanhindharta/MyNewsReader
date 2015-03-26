@@ -9,18 +9,35 @@
 	<string name="lgt">Log Out</string>
 	<string name="masuklr">Masukan Link URL RSS (XML) :\nContoh:\nhttp://news.yahoo.com/rss/topstories</string>
 	<string name="buka">Buka Link</string>
+	<string name="por">Buka Portal Berita</string>
+	<string name="alter">Atau Pilih Portal Berita di Bawah Ini :</string>
 	<string name="btnsf">Share to Facebook</string>
 	<string name="btnsg">Share to Google+</string>
 	<string name="drawer_open">Slider Menu Opened</string>
     <string name="drawer_close">Slider Menu Closed</string>
+
+    <string-array name="pr_link">
+       <item>http://news.yahoo.com/rss/topstories</item>
+       <item>http://rss.vivanews.com/get/all</item>
+       <item>http://www.antaranews.com/rss/news.xml</item>
+       <item>http://www.republika.co.id/rss</item>
+       <item>http://sindikasi.okezone.com/index.php/news/RSS2.0</item>
+       <item>http://ilmukomputer.org/feed/rss/</item>
+    </string-array>
+ 
+    <string-array name="pr_name">
+        <item>Yahoo News</item>
+        <item>Viva News</item>
+        <item>Antara News</item>
+        <item>Republika</item>
+        <item>Okezone</item>
+        <item>IlmuKomputer.org</item>
+    </string-array>    
     
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
         <item>RSS</item>
         <item >Tambah RSS Feed</item>
-        <item >Twitter</item>
-        
-
     </string-array>
     
     <!-- Nav Drawer List Item Icons -->
@@ -29,8 +46,7 @@
         <item>@drawable/ic_home</item>
         <item>@drawable/ic_people</item>
         <item>@drawable/ic_photos</item>
-        
-        
+
     </array>
     
     <!-- Content Description -->

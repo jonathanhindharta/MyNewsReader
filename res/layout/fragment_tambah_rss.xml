@@ -3,7 +3,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fragment_tambah"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <TextView
         android:id="@+id/txtLabel"
@@ -35,5 +36,35 @@
         android:layout_below="@+id/txtlxu"
         android:layout_centerHorizontal="true"
         android:text="@string/buka" />
+    
+    
+    <TextView
+        android:id="@+id/txtLabel2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/btnbuka"
+        android:text="@string/alter"
+        android:textSize="16sp" 
+        android:gravity="center_horizontal"/>
+    
+    
+     <Spinner
+        android:id="@+id/spr_pr_name"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/txtLabel2"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        />
+     
+     <Button
+        android:id="@+id/btnbuka2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spr_pr_name"
+        android:layout_centerHorizontal="true"
+        android:text="@string/por" />
 
 </RelativeLayout>

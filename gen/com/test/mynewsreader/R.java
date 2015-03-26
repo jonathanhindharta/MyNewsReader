@@ -20,10 +20,12 @@ public final class R {
         /**  Nav Drawer List Item Icons 
  Keep them in order as the titles are in 
          */
-        public static final int nav_drawer_icons=0x7f0c0001;
+        public static final int nav_drawer_icons=0x7f0c0003;
         /**  Nav Drawer Menu Items 
          */
-        public static final int nav_drawer_items=0x7f0c0000;
+        public static final int nav_drawer_items=0x7f0c0002;
+        public static final int pr_link=0x7f0c0000;
+        public static final int pr_name=0x7f0c0001;
     }
     public static final class attr {
         /**  Custom divider drawable to use for elements in the action bar. 
@@ -1496,7 +1498,7 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f0a0002;
         public static final int action_menu_presenter=0x7f0a0003;
         public static final int action_mode_close_button=0x7f0a0032;
-        public static final int action_settings=0x7f0a0080;
+        public static final int action_settings=0x7f0a0083;
         public static final int activity_chooser_view_content=0x7f0a0033;
         public static final int always=0x7f0a0013;
         public static final int beginning=0x7f0a001a;
@@ -1504,6 +1506,7 @@ containing a value of this type.
         public static final int box_count=0x7f0a001f;
         public static final int btn_sign_in=0x7f0a004c;
         public static final int btnbuka=0x7f0a007d;
+        public static final int btnbuka2=0x7f0a0080;
         public static final int btnlg=0x7f0a0055;
         public static final int btnsf=0x7f0a0078;
         public static final int btnsg=0x7f0a0079;
@@ -1558,10 +1561,10 @@ containing a value of this type.
         public static final int icon=0x7f0a0038;
         public static final int ifRoom=0x7f0a0015;
         public static final int image=0x7f0a0035;
-        public static final int imageView1=0x7f0a007f;
+        public static final int imageView1=0x7f0a0082;
         public static final int imgProfilePic=0x7f0a0053;
         public static final int inline=0x7f0a0023;
-        public static final int itemTitle=0x7f0a007e;
+        public static final int itemTitle=0x7f0a0081;
         public static final int large=0x7f0a001d;
         public static final int left=0x7f0a0026;
         public static final int listMode=0x7f0a000b;
@@ -1596,6 +1599,7 @@ containing a value of this type.
         public static final int showTitle=0x7f0a0011;
         public static final int small=0x7f0a001e;
         public static final int split_action_bar=0x7f0a002c;
+        public static final int spr_pr_name=0x7f0a007f;
         public static final int standard=0x7f0a0021;
         public static final int submit_area=0x7f0a0047;
         public static final int tabMode=0x7f0a000c;
@@ -1607,6 +1611,7 @@ containing a value of this type.
         public static final int top=0x7f0a0024;
         public static final int top_action_bar=0x7f0a002e;
         public static final int txtLabel=0x7f0a007b;
+        public static final int txtLabel2=0x7f0a007e;
         public static final int txtjudul=0x7f0a0076;
         public static final int txtlxu=0x7f0a007c;
         public static final int txtuser=0x7f0a0054;
@@ -1688,10 +1693,9 @@ containing a value of this type.
         public static final int fragment_layout_inside=0x7f03002b;
         public static final int fragment_rss_detail=0x7f03002c;
         public static final int fragment_tambah_rss=0x7f03002d;
-        public static final int fragment_twitter=0x7f03002e;
-        public static final int rss_item=0x7f03002f;
-        public static final int splashscreen=0x7f030030;
-        public static final int support_simple_spinner_dropdown_item=0x7f030031;
+        public static final int rss_item=0x7f03002e;
+        public static final int splashscreen=0x7f03002f;
+        public static final int support_simple_spinner_dropdown_item=0x7f030030;
     }
     public static final class menu {
         public static final int main=0x7f0d0000;
@@ -1738,6 +1742,7 @@ containing a value of this type.
          */
         public static final int abc_shareactionprovider_share_with_application=0x7f060025;
         public static final int action_settings=0x7f060045;
+        public static final int alter=0x7f06004d;
         public static final int app_id=0x7f060046;
         public static final int app_name=0x7f060044;
         /**   Title for notification shown when GooglePlayServices needs to be
@@ -1763,8 +1768,8 @@ containing a value of this type.
         [CHAR LIMIT=70] 
          */
         public static final int auth_client_using_bad_version_title=0x7f060014;
-        public static final int btnsf=0x7f06004c;
-        public static final int btnsg=0x7f06004d;
+        public static final int btnsf=0x7f06004e;
+        public static final int btnsg=0x7f06004f;
         public static final int buka=0x7f06004b;
         public static final int com_facebook_choose_friends=0x7f060038;
         public static final int com_facebook_dialogloginactivity_ok_button=0x7f060027;
@@ -1869,11 +1874,12 @@ containing a value of this type.
         public static final int cp=0x7f060048;
         /**  Content Description 
          */
-        public static final int desc_list_item_icon=0x7f060050;
-        public static final int drawer_close=0x7f06004f;
-        public static final int drawer_open=0x7f06004e;
+        public static final int desc_list_item_icon=0x7f060052;
+        public static final int drawer_close=0x7f060051;
+        public static final int drawer_open=0x7f060050;
         public static final int lgt=0x7f060049;
         public static final int masuklr=0x7f06004a;
+        public static final int por=0x7f06004c;
         public static final int saran=0x7f060047;
     }
     public static final class style {

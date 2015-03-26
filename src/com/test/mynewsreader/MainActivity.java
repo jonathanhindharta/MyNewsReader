@@ -218,8 +218,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
 		// Tambah RSS Reader
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
-		// Twitter
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
+		
 		
 		
 
@@ -321,9 +320,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 			break;
 		case 1:
 			fragment = new TambahRssFeedFragment();
-			break;
-		case 2:
-			fragment = new TwitterFragment();
 			break;
 		
 
